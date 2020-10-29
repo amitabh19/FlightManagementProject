@@ -26,7 +26,8 @@ import com.flight.repositories.ScheduledFlightRepository;
 import com.flight.repositories.UserRepository;
 
 @EntityScan(basePackages = "com.flight.entities")
-@SpringBootApplication(scanBasePackages = { "com.flight.repositories", "com.flight.enitites",  "com.flight.controllers", "com.flight.dao", "com.flight.service" })
+@SpringBootApplication(scanBasePackages = { "com.flight.repositories", "com.flight.enitites", "com.flight.controllers",
+		"com.flight.dao", "com.flight.service" })
 public class FlightManagementProjectApplication implements CommandLineRunner {
 
 	@Autowired
@@ -57,6 +58,7 @@ public class FlightManagementProjectApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		// TODO Auto-generated method stub
+
 		User u = new User("user", "amitabh", "sadadsa", new BigInteger("543534535"), "amitabh@gmail.com");
 		User u1 = new User("admin", "sahil", "fucku", new BigInteger("56565656"), "admin@gmail.com");
 		userRepo.save(u);
@@ -69,7 +71,7 @@ public class FlightManagementProjectApplication implements CommandLineRunner {
 		airRepo.save(b);
 
 		Flight f = new Flight(new BigInteger("4334367"), "Etihad", "Boeing", 700);
-		 f = flightRepo.save(f);
+		f = flightRepo.save(f);
 
 		LocalDateTime d = LocalDateTime.now();
 		LocalDateTime d1 = LocalDateTime.now();
@@ -77,14 +79,21 @@ public class FlightManagementProjectApplication implements CommandLineRunner {
 		sch = scheduleRepo.save(sch);
 		ScheduledFlight sf = new ScheduledFlight(f, 700, sch);
 		sf = sfrRepo.save(sf);
-		
-		Passenger p =  new Passenger("adsa", new BigInteger("4334367"), 21, 222);
+
+		Passenger p = new Passenger("adsa", new BigInteger("4334367"), 21, 222);
 		p = passengerRepo.save(p);
 		
-		List<Passenger> lp =  new ArrayList<Passenger>();
+		Passenger p1 = new Passenger("adsa1", new BigInteger("4334357"), 11, 212);
+		p1 = passengerRepo.save(p1);
+
+		List<Passenger> lp = new ArrayList<Passenger>();
 		lp.add(p);
-		Booking bbcn = new Booking(u, d, 500.0, sf, 1, lp);
+		Booking bbcn = new Booking(u, d, 500.0, sf, 1, lp); 
 		bbcn = bookingRepo.save(bbcn);
+		List<Passenger> lp1 = new ArrayList<Passenger>();
+		lp1.add(p1);
+		Booking bbcn1 = new Booking(u1, d, 500.0, sf, 1, lp1); 
+		bbcn1 = bookingRepo.save(bbcn1);
 
 	}
 
