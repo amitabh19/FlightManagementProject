@@ -1,0 +1,232 @@
+package com.flight.service;
+
+import java.math.BigInteger;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+
+import com.flight.dao.ScheduledFlightDao;
+import com.flight.entities.Airport;
+import com.flight.entities.Flight;
+import com.flight.entities.Schedule;
+import com.flight.entities.ScheduledFlight;
+import com.flight.exceptions.RecordAlreadyPresentException;
+import com.flight.exceptions.RecordNotFound;
+import com.flight.repositories.ScheduledFlightRepository;
+
+@Service
+public class ScheduledFlightServiceImpl implements ScheduledFlightService {
+	
+	Logger logger=LoggerFactory.getLogger(FlightServiceImpl.class);
+	
+	
+	@Autowired
+	private ScheduledFlightRepository sfRep;
+	
+	@Autowired
+	private ScheduledFlightDao sfDao;
+	
+
+	/**
+	 * This function is used to add the ScheduledFlight object to database
+	 * 
+	 * @author Garima
+	 * @param ScheduleFlight object to be added
+	 * @return scheduledFlight object added
+	 * @version 1.0
+	 * @since 29-10-2020
+	 */
+
+
+	@Override
+	public ResponseEntity<ScheduledFlight> scheduleFlight(ScheduledFlight scheduleFlight) {
+		logger.trace("schedule flight method is accessed at service layer");
+		try {
+			if(validateScheduledFlight(scheduleFlight))
+			{
+				sfDao.scheduleFlight(scheduleFlight);
+				return new ResponseEntity<ScheduledFlight>(scheduleFlight,HttpStatus.OK);
+			}
+			else
+			{
+				throw new RecordAlreadyPresentException("Scheduled flight with id: "+scheduleFlight.getScheduleId()+" is already present!!!");
+			}
+		}
+		catch(RecordAlreadyPresentException e)
+		{
+			System.out.println(e.getMessage());
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
+		}
+	}
+	
+
+	/**
+	 * This function is used to view Scheduled Flights from the source airport to destination airport on
+	 * the given date
+	 * 
+	 * @author Garima
+	 * @param Source airport, destination airport and date
+	 * @return List of all flights scheduled for the given airports and date
+	 * @version 1.0
+	 * @since 29-10-2020
+	 */
+
+	@Override
+	public List<Flight> viewScheduledFlights(Airport srcAirport, Airport destAirport, String date) {
+		logger.trace("view schedule flights method is accessed at service layer");
+		return sfDao.viewScheduledFlights(srcAirport, destAirport, date);
+	}
+
+	/**
+	 * This function is used to get ScheduledFlight object using scheduleId
+	 * 
+	 * @author Garima
+	 * @param Schedule Id
+	 * @return shows the schedules for the given schedule Id
+	 * @version 1.0
+	 * @since 29-10-2020
+	 */
+	@Override
+	public ScheduledFlight viewScheduledFlightById(BigInteger id) {
+		logger.trace("view schedule flights by id method is accessed at service layer");
+		return sfDao.viewScheduledFlightById(id);
+	}
+	
+	/**
+	 * This function is used to view Scheduled Flights using Flight number 
+	 * 
+	 * @author Garima
+	 * @param Flight Number
+	 * @return shows scheduled flights information using flight number provided
+	 * @version 1.0
+	 * @since 29-10-2020
+	 */
+	@Override
+	public List<ScheduledFlight> viewScheduledFlightsByFlightNumber(BigInteger flightNumber) {
+		logger.trace("view schedule flight by flight number method is accessed at service layer");
+		return sfDao.viewScheduledFlightsByFlightNumber(flightNumber);
+	}
+
+	
+	/**
+	 * This function is used to get the list of the ScheduledFlight
+	 * 
+	 * @author Garima
+	 * @param None
+	 * @return List of all the scheduled flights
+	 * @version 1.0
+	 * @since 29-10-2020
+	 */
+	@Override
+	public List<ScheduledFlight> viewAllScheduledFlights() {
+		logger.trace("view all schedule flights method is accessed at service layer");
+		return sfDao.viewAllScheduledFlights();
+	}
+
+	
+	/**
+	 * This function is used to modify the ScheduledFlight object by using flight,schedule objects and
+	 * number of available seats
+	 * 
+	 * @author Garima
+	 * @param Flight object,schedule object,number of available seats
+	 * @return modify the schedule for the given Flight
+	 * @version 1.0
+	 * @since 29-10-2020
+	 */
+	@Override
+	public ResponseEntity<ScheduledFlight> modifyScheduledFlight(Flight flight, Schedule schedule, int availableSeats) {
+		logger.trace("modify schedule flight method is accessed at service layer");
+		try{
+			List<ScheduledFlight> scheduledFlights=sfDao.viewAllScheduledFlights();
+			ScheduledFlight scheduledFlig=new ScheduledFlight(flight, availableSeats, schedule);
+			if(scheduledFlights.contains(scheduledFlig)) 
+			{
+				sfDao.modifyScheduledFlight(flight, schedule, availableSeats);
+				return new ResponseEntity<ScheduledFlight>(scheduledFlig,HttpStatus.OK);
+			}
+			else
+			{
+				throw new RecordNotFound("Given Scheduled flight does not exist");
+			}
+		}
+		catch(RecordNotFound e)
+		{
+			System.out.println(e.getMessage());
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+
+	
+	/**
+	 * This function is used to delete the scheduledFlight whose schedule ID is given
+	 * 
+	 * @author Garima
+	 * @param schedule ID
+	 * @return ScheduledFlight with the given Schedule ID is deleted
+	 */
+	@Override
+	public ResponseEntity<ScheduledFlight> deleteScheduledFlight(BigInteger id) {
+		logger.trace("delete schedule flight method is accessed at service layer");
+		try {
+			List<ScheduledFlight> scheduledFlights=sfDao.viewAllScheduledFlights();
+			ScheduledFlight scheduledflight=sfRep.findById(id).get();
+			if(scheduledFlights.contains(scheduledflight))
+			{
+				sfDao.deleteScheduledFlight(id);
+				return new ResponseEntity<ScheduledFlight>(scheduledflight,HttpStatus.OK);
+			}
+			else {
+				throw new RecordNotFound("Given scheduled flight does not exist");
+			}
+			
+		}
+		catch(RecordNotFound e) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	}
+	}
+
+	
+	/**
+	 * This function is used to validate scheduled flight details before adding it in database
+	 * 
+	 * @author Garima
+	 * @param ScheduledFlight object to be validated
+	 * @return Gives output on console whether ScheduledFlight object is valid or not
+	 * @version 1.0
+	 * @since 29-10-2020
+	 */
+	@Override
+	public boolean validateScheduledFlight(ScheduledFlight scheduledFlight) {
+		logger.trace("validate schedule flight method is accessed at service layer");
+		List<ScheduledFlight> sFlights=viewAllScheduledFlights();
+		for(ScheduledFlight sf:sFlights)
+		{
+			if(sf.getScheduleId().equals(scheduledFlight.getScheduleId()))
+			{
+				if(sf.getSchedule().getSourceAirport().equals(scheduledFlight.getSchedule().getSourceAirport()) && sf.getSchedule().getDestinationAirport().equals(scheduledFlight.getSchedule().getDestinationAirport()))
+				{
+					if(sf.getSchedule().getDepartureTime().equals(scheduledFlight.getSchedule().getDepartureTime()) && sf.getSchedule().getArrival().equals(scheduledFlight.getSchedule().getArrival()))
+					{
+						if(sf.getFlight().getFlightNumber().equals(scheduledFlight.getFlight().getFlightNumber()))
+						{
+							return false;
+						}
+					}
+				}
+				
+			}
+		}
+		return true;
+	}
+
+	
+	
+	
+
+}
