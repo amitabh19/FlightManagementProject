@@ -9,11 +9,11 @@ import com.flight.entities.Flight;
 
 public interface FlightService {
 	
-	public ResponseEntity<?> addFlight(Flight flight);
+	public Flight addFlight(Flight flight);
 	public List<Flight> viewAllFlight();
 	public Flight viewFlight(BigInteger flightNumber);
-	public ResponseEntity<Flight> modifyFlight(Flight flight);
-	public ResponseEntity<Flight> deleteFlight(BigInteger flightNumber);
+	public Flight modifyFlight(Flight flight);
+	public void deleteFlight(BigInteger flightNumber);
 	public boolean validateFlight(Flight flight);
 
 }

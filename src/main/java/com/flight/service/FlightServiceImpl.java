@@ -6,8 +6,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.flight.dao.FlightDao;
@@ -40,24 +38,17 @@ Logger logger=LoggerFactory.getLogger(FlightServiceImpl.class);
 	 */
 
 	@Override
-	public ResponseEntity<Flight> addFlight(Flight flight) {
-		logger.trace("add flight method is accessed in service layer");
-		try
-		{
+	public Flight addFlight(Flight flight) {
+		logger.info("add flight method is accessed in service layer");
 			if(validateFlight(flight)) {
 				flightDao.addFlight(flight);
-				return new ResponseEntity<Flight>(flight,HttpStatus.OK);
+				return flight;
 			}
 			else
 			{
-				System.out.println("Flight with Flight Number: "+ flight.getFlightNumber()+" is already present!!!");
+				logger.info("Flight with Flight Number: "+ flight.getFlightNumber()+" is already present!!!");
 				throw new RecordAlreadyPresentException("Flight with Flight Number: "+ flight.getFlightNumber()+" is already present!!!");
 			}
-		}
-		catch(RecordAlreadyPresentException e)
-		{
-			return new ResponseEntity<>(HttpStatus.CONFLICT);
-		}
 		
 	}
 
@@ -73,7 +64,7 @@ Logger logger=LoggerFactory.getLogger(FlightServiceImpl.class);
 
 	@Override
 	public List<Flight> viewAllFlight() {
-		logger.trace("view all flight method is accessed in service layer");
+		logger.info("view all flight method is accessed in service layer");
 		return flightDao.viewAllFlight();
 	}
 	
@@ -89,8 +80,14 @@ Logger logger=LoggerFactory.getLogger(FlightServiceImpl.class);
 
 	@Override
 	public Flight viewFlight(BigInteger flightNumber) {
-		logger.trace("view flight method is accessed in service layer");
+		logger.info("view flight method is accessed in service layer");
+		if(flightRep.findById(flightNumber).isPresent()) {
 		return flightDao.viewFlight(flightNumber);
+		}
+		else
+		{
+			throw new RecordNotFoundException("Given flight number does not exist");
+		}
 		
 	}
 	
@@ -105,24 +102,16 @@ Logger logger=LoggerFactory.getLogger(FlightServiceImpl.class);
 	 */
 
 	@Override
-	public ResponseEntity<Flight> modifyFlight(Flight flight) {
-		logger.trace("modify flight method is accessed in service layer");
-		try {
-			List<Flight> flights=flightDao.viewAllFlight();
-			if(flights.contains(flight))
+	public Flight modifyFlight(Flight flight) {
+		logger.info("modify flight method is accessed in service layer");
+			if(flightRep.findById(flight.getFlightNumber()).isPresent())
 			{
 				flightDao.modifyFlight(flight);
-				return new ResponseEntity<Flight>(flight,HttpStatus.OK);
+				return flight;
 			}
 			else {
 				throw new RecordNotFoundException("Flight with number: " + flight.getFlightNumber() + " not exists");
 			}
-		}
-		catch(RecordNotFoundException e)
-		{
-			System.out.println(e.getMessage());
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
 	}
 	
 
@@ -136,24 +125,15 @@ Logger logger=LoggerFactory.getLogger(FlightServiceImpl.class);
 	 * @since 29-10-2020
 	 */
 	@Override
-	public ResponseEntity<Flight> deleteFlight(BigInteger flightNumber) {
-		logger.trace("delete flight method is accessed in service layer");
-		try {
-			List<Flight> flights=flightDao.viewAllFlight();
-			Flight flight=flightRep.findById(flightNumber).get();
-			if(flights.contains(flight)) {
+	public void deleteFlight(BigInteger flightNumber) {
+		logger.info("delete flight method is accessed in service layer");
+			if(flightRep.findById(flightNumber).isPresent()) {
 				flightDao.removeFlight(flightNumber);
-				return new ResponseEntity<Flight>(flight,HttpStatus.OK);
 			}
 			else
 			{
 				throw new RecordNotFoundException("Flight with number: " + flightNumber + " not exists");
 			}
-			
-		}
-		catch(RecordNotFoundException e) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-	}
 	}
 	/**
 	 * This function is used to validate flight details before adding them to the database
