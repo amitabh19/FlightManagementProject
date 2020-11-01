@@ -12,12 +12,13 @@ import com.flight.entities.ScheduledFlight;
 
 public interface ScheduledFlightService {
 	
-	public ScheduledFlight scheduleFlight(ScheduledFlight scheduleFlight);
+	public ResponseEntity<ScheduledFlight> scheduleFlight(ScheduledFlight scheduleFlight);
 	public List<Flight> viewScheduledFlights(Airport srcAirport, Airport destAirport, String date);
+	public ScheduledFlight viewScheduledFlightById(BigInteger id);
 	public List<ScheduledFlight> viewScheduledFlightsByFlightNumber(BigInteger flightNumber);
 	public List<ScheduledFlight> viewAllScheduledFlights();
-	public ScheduledFlight modifyScheduledFlight(Flight flight, Schedule schedule, int availableSeats);
-	public void deleteScheduledFlight(BigInteger id);
+	public ResponseEntity<ScheduledFlight> modifyScheduledFlight(Flight flight, Schedule schedule, int availableSeats);
+	public ResponseEntity<ScheduledFlight> deleteScheduledFlight(BigInteger id);
 	public boolean validateScheduledFlight(ScheduledFlight scheduledFlight);
 
 

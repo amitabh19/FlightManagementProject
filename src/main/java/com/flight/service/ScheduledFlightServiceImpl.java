@@ -6,6 +6,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.flight.dao.ScheduledFlightDao;
@@ -42,17 +44,24 @@ public class ScheduledFlightServiceImpl implements ScheduledFlightService {
 
 
 	@Override
-	public ScheduledFlight scheduleFlight(ScheduledFlight scheduleFlight) {
-		logger.info("schedule flight method is accessed at service layer");
+	public ResponseEntity<ScheduledFlight> scheduleFlight(ScheduledFlight scheduleFlight) {
+		logger.trace("schedule flight method is accessed at service layer");
+		try {
 			if(validateScheduledFlight(scheduleFlight))
 			{
 				sfDao.scheduleFlight(scheduleFlight);
-				return scheduleFlight;
+				return new ResponseEntity<ScheduledFlight>(scheduleFlight,HttpStatus.OK);
 			}
 			else
 			{
 				throw new RecordAlreadyPresentException("Scheduled flight with id: "+scheduleFlight.getScheduleId()+" is already present!!!");
 			}
+		}
+		catch(RecordAlreadyPresentException e)
+		{
+			System.out.println(e.getMessage());
+			return new ResponseEntity<>(HttpStatus.CONFLICT);
+		}
 	}
 	
 
@@ -69,10 +78,24 @@ public class ScheduledFlightServiceImpl implements ScheduledFlightService {
 
 	@Override
 	public List<Flight> viewScheduledFlights(Airport srcAirport, Airport destAirport, String date) {
-		logger.info("view schedule flights method is accessed at service layer");
+		logger.trace("view schedule flights method is accessed at service layer");
 		return sfDao.viewScheduledFlights(srcAirport, destAirport, date);
 	}
 
+	/**
+	 * This function is used to get ScheduledFlight object using scheduleId
+	 * 
+	 * @author Garima
+	 * @param Schedule Id
+	 * @return shows the schedules for the given schedule Id
+	 * @version 1.0
+	 * @since 29-10-2020
+	 */
+	@Override
+	public ScheduledFlight viewScheduledFlightById(BigInteger id) {
+		logger.trace("view schedule flights by id method is accessed at service layer");
+		return sfDao.viewScheduledFlightById(id);
+	}
 	
 	/**
 	 * This function is used to view Scheduled Flights using Flight number 
@@ -85,16 +108,8 @@ public class ScheduledFlightServiceImpl implements ScheduledFlightService {
 	 */
 	@Override
 	public List<ScheduledFlight> viewScheduledFlightsByFlightNumber(BigInteger flightNumber) {
-		logger.info("view schedule flight by flight number method is accessed at service layer");
-		List<ScheduledFlight> flights=sfDao.viewScheduledFlightsByFlightNumber(flightNumber);
-		if(flights.size()!=0)
-		{
-			return flights;
-		}
-		else {
-			throw new RecordNotFoundException("Given flight number does not exist");
-		}
-		
+		logger.trace("view schedule flight by flight number method is accessed at service layer");
+		return sfDao.viewScheduledFlightsByFlightNumber(flightNumber);
 	}
 
 	
@@ -109,7 +124,7 @@ public class ScheduledFlightServiceImpl implements ScheduledFlightService {
 	 */
 	@Override
 	public List<ScheduledFlight> viewAllScheduledFlights() {
-		logger.info("view all schedule flights method is accessed at service layer");
+		logger.trace("view all schedule flights method is accessed at service layer");
 		return sfDao.viewAllScheduledFlights();
 	}
 
@@ -125,18 +140,26 @@ public class ScheduledFlightServiceImpl implements ScheduledFlightService {
 	 * @since 29-10-2020
 	 */
 	@Override
-	public ScheduledFlight modifyScheduledFlight(Flight flight, Schedule schedule, int availableSeats) {
-		logger.info("modify schedule flight method is accessed at service layer");
+	public ResponseEntity<ScheduledFlight> modifyScheduledFlight(Flight flight, Schedule schedule, int availableSeats) {
+		logger.trace("modify schedule flight method is accessed at service layer");
+		try{
 			List<ScheduledFlight> scheduledFlights=sfDao.viewAllScheduledFlights();
 			ScheduledFlight scheduledFlig=new ScheduledFlight(flight, availableSeats, schedule);
-			for(ScheduledFlight sf:scheduledFlights)
-			{
-			if(sf.getFlight().getFlightNumber().equals(flight.getFlightNumber())) 
+			if(scheduledFlights.contains(scheduledFlig)) 
 			{
 				sfDao.modifyScheduledFlight(flight, schedule, availableSeats);
-				return scheduledFlig;
-			}}
+				return new ResponseEntity<ScheduledFlight>(scheduledFlig,HttpStatus.OK);
+			}
+			else
+			{
 				throw new RecordNotFoundException("Given Scheduled flight does not exist");
+			}
+		}
+		catch(RecordNotFoundException e)
+		{
+			System.out.println(e.getMessage());
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 	}
 
 	
@@ -148,18 +171,24 @@ public class ScheduledFlightServiceImpl implements ScheduledFlightService {
 	 * @return ScheduledFlight with the given Schedule ID is deleted
 	 */
 	@Override
-	public void deleteScheduledFlight(BigInteger id) {
-		logger.info("delete schedule flight method is accessed at service layer");
+	public ResponseEntity<ScheduledFlight> deleteScheduledFlight(BigInteger id) {
+		logger.trace("delete schedule flight method is accessed at service layer");
+		try {
 			List<ScheduledFlight> scheduledFlights=sfDao.viewAllScheduledFlights();
 			ScheduledFlight scheduledflight=sfRep.findById(id).get();
 			if(scheduledFlights.contains(scheduledflight))
 			{
 				sfDao.deleteScheduledFlight(id);
+				return new ResponseEntity<ScheduledFlight>(scheduledflight,HttpStatus.OK);
 			}
 			else {
 				throw new RecordNotFoundException("Given scheduled flight does not exist");
 			}
 			
+		}
+		catch(RecordNotFoundException e) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	}
 	}
 
 	
@@ -174,7 +203,7 @@ public class ScheduledFlightServiceImpl implements ScheduledFlightService {
 	 */
 	@Override
 	public boolean validateScheduledFlight(ScheduledFlight scheduledFlight) {
-		logger.info("validate schedule flight method is accessed at service layer");
+		logger.trace("validate schedule flight method is accessed at service layer");
 		List<ScheduledFlight> sFlights=viewAllScheduledFlights();
 		for(ScheduledFlight sf:sFlights)
 		{

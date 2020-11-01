@@ -12,6 +12,7 @@ public interface ScheduledFlightDao {
 
 	public ScheduledFlight scheduleFlight(ScheduledFlight scheduleFlight);
 	public List<Flight> viewScheduledFlights(Airport srcAirport, Airport destAirport, String date);
+	public ScheduledFlight viewScheduledFlightById(BigInteger id);
 	public List<ScheduledFlight> viewScheduledFlightsByFlightNumber(BigInteger flightNumber);
 	public List<ScheduledFlight> viewAllScheduledFlights();
 	public ScheduledFlight modifyScheduledFlight(Flight flight, Schedule schedule, int availableSeats);
