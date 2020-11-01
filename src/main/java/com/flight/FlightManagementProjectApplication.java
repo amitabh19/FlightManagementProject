@@ -60,7 +60,7 @@ public class FlightManagementProjectApplication implements CommandLineRunner {
 		// TODO Auto-generated method stub
 
 		User u = new User("user", "amitabh", "sadadsa", new BigInteger("543534535"), "amitabh@gmail.com");
-		User u1 = new User("admin", "sahil", "fucku", new BigInteger("56565656"), "admin@gmail.com");
+		User u1 = new User("admin", "sahil", "fppp", new BigInteger("56565656"), "admin@gmail.com");
 		userRepo.save(u);
 		userRepo.save(u1);
 
@@ -82,19 +82,19 @@ public class FlightManagementProjectApplication implements CommandLineRunner {
 
 		Passenger p = new Passenger("adsa", new BigInteger("4334367"), 21, 222);
 		p = passengerRepo.save(p);
-		
+
 		Passenger p1 = new Passenger("adsa1", new BigInteger("4334357"), 11, 212);
 		p1 = passengerRepo.save(p1);
 
 		List<Passenger> lp = new ArrayList<Passenger>();
 		lp.add(p);
-		Booking bbcn = new Booking(u, d, 500.0, sf, 1, lp); 
+		Booking bbcn = new Booking(u, d, 500.0, sf, 1, lp);
 		bbcn = bookingRepo.save(bbcn);
 		List<Passenger> lp1 = new ArrayList<Passenger>();
 		lp1.add(p1);
-		Booking bbcn1 = new Booking(u1, d, 500.0, sf, 1, lp1); 
+		Booking bbcn1 = new Booking(u1, d, 500.0, sf, 1, lp1);
 		bbcn1 = bookingRepo.save(bbcn1);
-
+		//userRepo.deleteById(u.getUserId());
 	}
 
 }

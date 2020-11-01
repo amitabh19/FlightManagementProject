@@ -13,21 +13,19 @@ public class PassengerServiceImpl implements PassengerService {
 
 	@Autowired
 	private PassengerDao passengerDao;
+
 	@Override
 	public Passenger addPassenger(Passenger p) {
-		// TODO Auto-generated method stub
 		return passengerDao.addPassenger(p);
 	}
 
 	@Override
 	public Passenger viewPassenger(BigInteger id) {
-		// TODO Auto-generated method stub
 		return passengerDao.viewPassenger(id);
 	}
 
 	@Override
 	public Passenger getPassengerByPnr(BigInteger pnrNumber) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

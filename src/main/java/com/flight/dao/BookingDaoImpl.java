@@ -6,6 +6,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -44,6 +46,9 @@ public class BookingDaoImpl implements BookingDao {
 	@Autowired
 	private BookingRepository bookingRepo;
 
+	
+	Logger logger = LoggerFactory.getLogger(BookingDaoImpl.class);
+	
 	/**
 	 * This function is used to search the bookings when arrival and departure
 	 * destination is entered along with the date
@@ -57,7 +62,8 @@ public class BookingDaoImpl implements BookingDao {
 	 **/
 	@Override
 	public List<ScheduledFlight> searchBooking(GetSchedule schedule) {
-
+		logger.trace("Search Booking Dao layer accessed");
+		
 		List<ScheduledFlight> getAllSchedules = sfrRepo.findAll();
 		List<ScheduledFlight> foundSchedules = new ArrayList<ScheduledFlight>();
 		for (ScheduledFlight sch : getAllSchedules) {
@@ -70,10 +76,8 @@ public class BookingDaoImpl implements BookingDao {
 
 			if (arrivalLocation.equals(schedule.getArrival()) && departureLocation.equals(schedule.getDeparture())
 					&& formattedDate.equals(formattedDate)) {
-				System.out.println("Condition Met");
 				foundSchedules.add(sch);
-				System.out.println(sch.getFlight().getCarrierName());
-
+			
 			}
 
 		}
@@ -94,21 +98,39 @@ public class BookingDaoImpl implements BookingDao {
 	@Override
 	public List<Booking> getUserBookings(BigInteger userId) {
 		// TODO Auto-generated method stub
+		logger.trace("Get User Booking Dao layer accessed");
+		
 		List<Booking> getAllBookings = bookingRepo.findAll();
 		List<Booking> getUserBookings = new ArrayList<Booking>();
-
+		
+		
+		
 		for (Booking b : getAllBookings) {
+			
 			BigInteger buid = b.getUserId().getUserId();
 			if (buid.equals(userId)) {
-				System.out.println("Booking found");
 				getUserBookings.add(b);
 			}
 		}
+		
 		return getUserBookings;
 	}
 
+
+	/**
+	 * This function is used to create booking for a user
+	 * @param b will return the booking object input by the user
+	 * @return will return the booked booking
+	 * 
+	 * @author Sahil Narula and Amitabh Saxena
+	 * @version 1.0 
+	 * @since 28-10-2020
+	**/
 	@Override
 	public Booking createBooking(Booking b) {
+	
+		logger.trace("Create Booking Dao layer accessed");
+		
 		return bookingRepo.save(b);
 	}
 

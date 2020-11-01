@@ -14,7 +14,7 @@ import com.flight.dao.FlightDao;
 
 import com.flight.entities.Flight;
 import com.flight.exceptions.RecordAlreadyPresentException;
-import com.flight.exceptions.RecordNotFound;
+import com.flight.exceptions.RecordNotFoundException;
 import com.flight.repositories.FlightRepository;
 
 @Service
@@ -115,10 +115,10 @@ Logger logger=LoggerFactory.getLogger(FlightServiceImpl.class);
 				return new ResponseEntity<Flight>(flight,HttpStatus.OK);
 			}
 			else {
-				throw new RecordNotFound("Flight with number: " + flight.getFlightNumber() + " not exists");
+				throw new RecordNotFoundException("Flight with number: " + flight.getFlightNumber() + " not exists");
 			}
 		}
-		catch(RecordNotFound e)
+		catch(RecordNotFoundException e)
 		{
 			System.out.println(e.getMessage());
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -147,11 +147,11 @@ Logger logger=LoggerFactory.getLogger(FlightServiceImpl.class);
 			}
 			else
 			{
-				throw new RecordNotFound("Flight with number: " + flightNumber + " not exists");
+				throw new RecordNotFoundException("Flight with number: " + flightNumber + " not exists");
 			}
 			
 		}
-		catch(RecordNotFound e) {
+		catch(RecordNotFoundException e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 	}

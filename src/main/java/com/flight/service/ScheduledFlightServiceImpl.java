@@ -16,7 +16,7 @@ import com.flight.entities.Flight;
 import com.flight.entities.Schedule;
 import com.flight.entities.ScheduledFlight;
 import com.flight.exceptions.RecordAlreadyPresentException;
-import com.flight.exceptions.RecordNotFound;
+import com.flight.exceptions.RecordNotFoundException;
 import com.flight.repositories.ScheduledFlightRepository;
 
 @Service
@@ -152,10 +152,10 @@ public class ScheduledFlightServiceImpl implements ScheduledFlightService {
 			}
 			else
 			{
-				throw new RecordNotFound("Given Scheduled flight does not exist");
+				throw new RecordNotFoundException("Given Scheduled flight does not exist");
 			}
 		}
-		catch(RecordNotFound e)
+		catch(RecordNotFoundException e)
 		{
 			System.out.println(e.getMessage());
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -182,11 +182,11 @@ public class ScheduledFlightServiceImpl implements ScheduledFlightService {
 				return new ResponseEntity<ScheduledFlight>(scheduledflight,HttpStatus.OK);
 			}
 			else {
-				throw new RecordNotFound("Given scheduled flight does not exist");
+				throw new RecordNotFoundException("Given scheduled flight does not exist");
 			}
 			
 		}
-		catch(RecordNotFound e) {
+		catch(RecordNotFoundException e) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 	}

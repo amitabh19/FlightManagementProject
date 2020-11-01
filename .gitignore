@@ -1,0 +1,4 @@
+
+.settings/org.eclipse.m2e.core.prefs
+target/classes/META-INF/maven/com.flight/FlightManagementProject/pom.properties
+*.properties
