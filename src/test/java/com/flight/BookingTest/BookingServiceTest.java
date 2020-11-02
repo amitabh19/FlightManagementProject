@@ -30,10 +30,10 @@ public class BookingServiceTest {
 
 	@Autowired
 	BookingService bookingService;
-	
+
 	@Autowired
 	BookingDao bookingDao;
-	
+
 	/**
 	 * This function will test the search functionality of the Service Layer
 	 * 
@@ -42,22 +42,19 @@ public class BookingServiceTest {
 	 * @since 30-10-2020
 	 */
 	@Test
-	public void testSearchFunction()  {
-		DateTimeFormatter formatter =  DateTimeFormatter.ofPattern("dd-MM-yyyy");
+	public void testSearchFunction() {
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 		LocalDateTime time = LocalDateTime.now();
-		
-		
+
 		GetSchedule schedule = new GetSchedule();
 		schedule.setArrival("Barcelona");
 		schedule.setDeparture("Munich");
 		schedule.setDate(time.format(formatter));
-		List<ScheduledFlight> flightList= bookingService.searchBooking(schedule);
-		
+		List<ScheduledFlight> flightList = bookingService.searchBooking(schedule);
+
 		Assert.assertNotNull(flightList);
-		
+
 	}
-	
-	
 
 	/**
 	 * This function will test the get booking functionality of the Service Layer
@@ -68,14 +65,11 @@ public class BookingServiceTest {
 	 */
 	@Test
 	public void testGetBookingByUserId() {
-		
+
 		List<Booking> bookingList = bookingService.getUserBookings(new BigInteger("1"));
 		Assert.assertNotNull(bookingList);
-		
+
 	}
-	
-	
-	
 
 	/**
 	 * This function will test the create booking functionality of the Service Layer
@@ -86,9 +80,9 @@ public class BookingServiceTest {
 	 */
 	@Test
 	public void testMakeBookings() {
-		User u = new User("user", "amitabh", "sadadsa", new BigInteger("543534535"), "amitabh@gmail.com");
-		
-		DateTimeFormatter formatter =  DateTimeFormatter.ofPattern("dd-MM-yyyy");
+		User u = new User("user", "amitabh", "sadadsa", "2323232324", "amitabh@gmail.com");
+
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 		LocalDateTime time = LocalDateTime.now();
 		LocalDateTime d = LocalDateTime.now();
 		GetSchedule schedule = new GetSchedule();
@@ -96,18 +90,17 @@ public class BookingServiceTest {
 		schedule.setDeparture("Munich");
 		schedule.setDate(time.format(formatter));
 		ScheduledFlight sf = bookingDao.searchBooking(schedule).get(0);
-		
+
 		Passenger p1 = new Passenger("adsa1", new BigInteger("4334357"), 11, 212);
-	
 
 		List<Passenger> lp = new ArrayList<Passenger>();
 		lp.add(p1);
-		
-		Booking booking = new Booking(u,d, 500.0, sf, 1,lp);
-		
+
+		Booking booking = new Booking(u, d, 500.0, sf, 1, lp);
+
 		Booking bookedObject = bookingService.createBooking(booking);
-	
+
 		Assert.assertEquals(bookedObject, booking);
-		
+
 	}
 }

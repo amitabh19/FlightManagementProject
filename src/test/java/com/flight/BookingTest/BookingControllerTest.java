@@ -91,7 +91,7 @@ public class BookingControllerTest {
 
 	@Test
 	public void testMakeBookings() {
-		User u = new User("user", "amitabh", "sadadsa", new BigInteger("543534535"), "amitabh@gmail.com");
+		User u = new User("user", "amitabh", "sadadsa", "2323232324", "amitabh@gmail.com");
 		
 		DateTimeFormatter formatter =  DateTimeFormatter.ofPattern("dd-MM-yyyy");
 		LocalDateTime time = LocalDateTime.now();

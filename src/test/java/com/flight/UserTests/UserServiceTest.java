@@ -1,4 +1,4 @@
-package com.flight;
+package com.flight.UserTests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -39,7 +39,7 @@ class UserServiceTest {
 	@Test
 	@Rollback
 	public void testCreateUser() {
-		User u = new User("admin", "test user", "test user", new BigInteger("23232322"), "test@user");
+		User u = new User("admin", "test user", "test user", "2323232323", "test@user");
 		ResponseEntity<?> res = userService.createUser(u);
 		User resultUser = (User) res.getBody();
 		u.setUserId(resultUser.getUserId());
@@ -55,7 +55,7 @@ class UserServiceTest {
 	@Test
 	@Rollback
 	public void testUpdateUser() {
-		User u = new User("admin", "test user", "test user", new BigInteger("23232322"), "test@user");
+		User u = new User("admin", "test user", "test user", "2323232323", "test@user");
 		u = (User) userService.createUser(u).getBody();
 		u.setUserName("new name");
 		User u1 = (User) userService.updateUser(u).getBody();
@@ -69,7 +69,7 @@ class UserServiceTest {
 	@Test
 	@Rollback
 	public void testViewUserById() {
-		User testUser = new User("admin", "test user", "test user", new BigInteger("23232322"), "test@user");
+		User testUser = new User("admin", "test user", "test user", "2323232323", "test@user");
 		ResponseEntity<?> res = userService.createUser(testUser);
 		testUser = (User) res.getBody();
 		BigInteger id = testUser.getUserId();
@@ -84,10 +84,10 @@ class UserServiceTest {
 	@Test
 	@Rollback
 	public void testValidateUser() {
-		User testUser = new User("admin", "test user", "test user", new BigInteger("23232322"), "test@user");
+		User testUser = new User("admin", "test user", "test user", "2323232323", "test@user");
 		ResponseEntity<?> res = userService.createUser(testUser);
 		testUser = (User) res.getBody();
-		User dummyUser = new User("admin", "dummy user", "dummy user", new BigInteger("21132322"), "dummy@user");
+		User dummyUser = new User("admin", "dummy user", "dummy user", "2323232322", "dummy@user");
 		dummyUser.setUserId(new BigInteger("1111"));
 		assertEquals(userService.validateUser(testUser), true);
 		assertEquals(userService.validateUser(dummyUser), false);
@@ -114,7 +114,7 @@ class UserServiceTest {
 	@Test
 	@Rollback
 	public void testDeleteUser() {
-		User testUser = new User("admin", "test user", "test user", new BigInteger("23232322"), "test@user");
+		User testUser = new User("admin", "test user", "test user", "2323232323", "test@user");
 		ResponseEntity<?> res = userService.createUser(testUser);
 		testUser = (User) res.getBody();
 		assertEquals(userService.deleteUser(testUser.getUserId()), "User Deleted!!");

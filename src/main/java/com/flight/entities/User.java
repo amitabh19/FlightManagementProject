@@ -9,6 +9,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.Range;
 
 @Entity
 @Table(name = "user")
@@ -17,11 +21,13 @@ public class User {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private BigInteger userId;
-
+    @NotNull 
 	private String userType;
 	private String userName;
+	@Size(min = 4, max = 15, message = "password cannot be less than 4 characters and more than 15 chars")
 	private String userPassword;
-	private BigInteger userPhone;
+	@Size(min = 10, max = 10, message = "mobile number should only be 10 digits")
+	private String userPhone;
 	@Column(unique = true)
 	private String email;
 
@@ -92,14 +98,14 @@ public class User {
 	/**
 	 * @return the userPhone
 	 */
-	public BigInteger getUserPhone() {
+	public String getUserPhone() {
 		return userPhone;
 	}
 
 	/**
 	 * @param userPhone the userPhone to set
 	 */
-	public void setUserPhone(BigInteger userPhone) {
+	public void setUserPhone(String userPhone) {
 		this.userPhone = userPhone;
 	}
 
@@ -179,7 +185,7 @@ public class User {
 	 * @param userPhone
 	 * @param email
 	 */
-	public User(String userType, String userName, String userPassword, BigInteger userPhone, String email) {
+	public User(String userType, String userName, String userPassword, String userPhone, String email) {
 		this.userType = userType;
 		this.userName = userName;
 		this.userPassword = userPassword;

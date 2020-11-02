@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.flight;
+package com.flight.UserTests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -35,7 +35,7 @@ class UserControllerTest {
 	@Test
 	@Rollback
 	void testAddUser() {
-		User u = new User("admin", "test user", "test user", new BigInteger("23232322"), "test@user");
+		User u = new User("admin", "test user", "test user","2323232323", "test@user");
 		ResponseEntity<?> res = userController.addUser(u);
 		User resultUser = (User) res.getBody();
 		u.setUserId(resultUser.getUserId());
@@ -49,7 +49,7 @@ class UserControllerTest {
 	 */
 	@Test
 	void testViewUser() {
-		User testUser = new User("admin", "test user", "test user", new BigInteger("23232322"), "test@user");
+		User testUser = new User("admin", "test user", "test user", "2323232323", "test@user");
 		ResponseEntity<?> res = userController.addUser(testUser);
 		testUser = (User) res.getBody();
 		BigInteger id = testUser.getUserId();
@@ -63,7 +63,7 @@ class UserControllerTest {
 	 */
 	@Test
 	void testUpdateUser() {
-		User u = new User("admin", "test user", "test user", new BigInteger("23232322"), "test@user");
+		User u = new User("admin", "test user", "test user", "2323232323", "test@user");
 		u = (User) userController.addUser(u).getBody();
 		u.setUserName("new name");
 		User u1 = (User) userController.updateUser(u).getBody();
@@ -77,10 +77,10 @@ class UserControllerTest {
 	 */
 	@Test
 	void testValidateUser() {
-		User testUser = new User("admin", "test user", "test user", new BigInteger("23232322"), "test@user");
+		User testUser = new User("admin", "test user", "test user", "2323232323", "test@user");
 		ResponseEntity<?> res = userController.addUser(testUser);
 		testUser = (User) res.getBody();
-		User dummyUser = new User("admin", "dummy user", "dummy user", new BigInteger("21132322"), "dummy@user");
+		User dummyUser = new User("admin", "dummy user", "dummy user","2323232322", "dummy@user");
 		dummyUser.setUserId(new BigInteger("1111"));
 		assertEquals(userController.validateUser(testUser), "valid user");
 		assertEquals(userController.validateUser(dummyUser), "invalid user");
@@ -91,7 +91,7 @@ class UserControllerTest {
 	 */
 	@Test
 	void testGetUsers() {
-		User testUser = new User("admin", "test user", "test user", new BigInteger("23232322"), "test@user");
+		User testUser = new User("admin", "test user", "test user", "2323232323", "test@user");
 		ResponseEntity<?> res = userController.addUser(testUser);
 		testUser = (User) res.getBody();
 		BigInteger id = testUser.getUserId();
@@ -105,7 +105,7 @@ class UserControllerTest {
 	 */
 	@Test
 	void testDeleteUser() {
-		User testUser = new User("admin", "test user", "test user", new BigInteger("23232322"), "test@user");
+		User testUser = new User("admin", "test user", "test user", "2323232323", "test@user");
 		ResponseEntity<?> res = userController.addUser(testUser);
 		testUser = (User) res.getBody();
 		assertEquals(userController.deleteUser(testUser.getUserId()), "User Deleted!!");

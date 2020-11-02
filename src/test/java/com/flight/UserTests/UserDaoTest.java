@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.flight;
+package com.flight.UserTests;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -37,7 +37,7 @@ class UserDaoTest {
 	@Test
 	@Rollback
 	void testAddUser() {
-		User u = new User("user", "test user", "testuser", new BigInteger("12345"), "test@user");
+		User u = new User("user", "test user", "testuser", "1234567890", "test@user");
 		User u1 = userDao.addUser(u);
 		u.setUserId(u1.getUserId());
 		assertEquals(u, u1);
@@ -50,7 +50,7 @@ class UserDaoTest {
 	@Test
 	@Rollback
 	void testUpdateUser() {
-		User u = new User("user", "test user", "testuser", new BigInteger("12345"), "test@user");
+		User u = new User("user", "test user", "testuser", "1234567890", "test@user");
 		User u1 = userDao.addUser(u);
 		u1.setUserName("new name");
 		assertEquals(u1, userDao.updateUser(u1));
@@ -63,7 +63,7 @@ class UserDaoTest {
 	@Test
 	@Rollback
 	void testViewUserById() {
-		User u = new User("user", "test user", "testuser", new BigInteger("12345"), "test@user");
+		User u = new User("user", "test user", "testuser", "1234567890", "test@user");
 		User u1 = userDao.addUser(u);
 		assertEquals(u1, userDao.viewUserById(u1.getUserId()).get());
 

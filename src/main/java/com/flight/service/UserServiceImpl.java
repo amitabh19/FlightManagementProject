@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
 			user = userDao.addUser(user);
 			return new ResponseEntity<User>(user, HttpStatus.OK);
 		} else {
-			throw new RecordAlreadyPresentException("User with Id: " + u.getUserId() + " user already exists!!");
+			throw new RecordAlreadyPresentException("User with Id: " + u.getUserId() + " already exists!! or user with same email exists");
 		}
 
 	}
@@ -65,13 +65,15 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public ResponseEntity<?> updateUser(User u) throws RecordNotFoundException {
 		logger.trace("updateUser method accessed in UserServiceImpl");
-
-		// userRepo.findById(u.getUserId()).isPresent()
 		if (userDao.viewUserById(u.getUserId()).isPresent()) {
+			if(checkIfUserAlreadyPresent(u))
+			{
+				throw new RecordAlreadyPresentException("email already used by other user");
+			}
 			userDao.updateUser(u);
 			return new ResponseEntity<User>(u, HttpStatus.OK);
 		} else {
-			throw new RecordNotFoundException("User with Id: " + u.getUserId() + "user doesn't exist!!");
+			throw new RecordNotFoundException("User with Id: " + u.getUserId() + " doesn't exist!!");
 		}
 
 	}
@@ -174,7 +176,7 @@ public class UserServiceImpl implements UserService {
 	public boolean checkIfUserAlreadyPresent(User u) {
 		List<User> listUsers = userDao.displayAllUsers();
 		for (User user : listUsers) {
-			if (user.getEmail().equals(u.getEmail())) {
+			if (user.getEmail().equals(u.getEmail()) && u.getUserId()!= user.getUserId()) {
 				return true;
 			}
 		}

@@ -25,16 +25,13 @@ import com.flight.entities.ScheduledFlight;
 import com.flight.entities.User;
 import com.flight.exceptions.RecordNotFoundException;
 
-
 @RunWith(SpringRunner.class)
 @Transactional
 @SpringBootTest
 public class BookingTestDao {
-	
+
 	@Autowired
 	BookingDao bookingDao;
-	
-	
 
 	/**
 	 * This function will test the search functionality of the DAO Layer
@@ -45,24 +42,22 @@ public class BookingTestDao {
 	 */
 	@Test
 	public void testSearchFunction() {
-		DateTimeFormatter formatter =  DateTimeFormatter.ofPattern("dd-MM-yyyy");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 		LocalDateTime time = LocalDateTime.now();
-		
-		
+
 		GetSchedule schedule = new GetSchedule();
 		schedule.setArrival("Barcelona");
 		schedule.setDeparture("Munich");
 		schedule.setDate(time.format(formatter));
 		List<ScheduledFlight> flightList = bookingDao.searchBooking(schedule);
-		
+
 		Assert.assertNotNull(flightList);
-		
+
 	}
-	
-	
 
 	/**
-	 * This function will test the get booking by user id functionality of the DAO Layer
+	 * This function will test the get booking by user id functionality of the DAO
+	 * Layer
 	 * 
 	 * @throws FlightNotFound
 	 * @author Sahil Narula
@@ -70,13 +65,11 @@ public class BookingTestDao {
 	 */
 	@Test
 	public void testGetBookingByUserId() {
-		
+
 		List<Booking> bookingList = bookingDao.getUserBookings(new BigInteger("2"));
 		Assert.assertNotNull(bookingList);
-		
+
 	}
-	
-	
 
 	/**
 	 * This function will test the create booking functionality of the DAO Layer
@@ -87,9 +80,9 @@ public class BookingTestDao {
 	 */
 	@Test
 	public void testMakeBookings() {
-		User u = new User("user", "amitabh", "sadadsa", new BigInteger("543534535"), "amitabh@gmail.com");
-		
-		DateTimeFormatter formatter =  DateTimeFormatter.ofPattern("dd-MM-yyyy");
+		User u = new User("user", "amitabh", "sadadsa", "2323232324", "amitabh@gmail.com");
+
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
 		LocalDateTime time = LocalDateTime.now();
 		LocalDateTime d = LocalDateTime.now();
 		GetSchedule schedule = new GetSchedule();
@@ -97,18 +90,17 @@ public class BookingTestDao {
 		schedule.setDeparture("Munich");
 		schedule.setDate(time.format(formatter));
 		ScheduledFlight sf = bookingDao.searchBooking(schedule).get(0);
-		
+
 		Passenger p1 = new Passenger("adsa1", new BigInteger("4334357"), 11, 212);
-	
 
 		List<Passenger> lp = new ArrayList<Passenger>();
 		lp.add(p1);
-		
-		Booking booking = new Booking(u,d, 500.0, sf, 1,lp);
-		
+
+		Booking booking = new Booking(u, d, 500.0, sf, 1, lp);
+
 		Booking bookedObject = bookingDao.createBooking(booking);
-	
+
 		Assert.assertEquals(bookedObject, booking);
-		
+
 	}
 }
