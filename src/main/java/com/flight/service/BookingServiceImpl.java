@@ -39,7 +39,7 @@ public class BookingServiceImpl implements BookingService {
 			List<ScheduledFlight> flightList = bookDao.searchBooking(schedule);
 			if(flightList.size()==0) {
 				logger.trace("Flights not found exception thrown");
-					throw new RecordNotFoundException("Not found");
+					throw new RecordNotFoundException("Flight Not found");
 			}
 			else {
 				return flightList;

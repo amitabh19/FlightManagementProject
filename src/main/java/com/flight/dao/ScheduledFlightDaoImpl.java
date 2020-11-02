@@ -36,7 +36,7 @@ public class ScheduledFlightDaoImpl implements ScheduledFlightDao {
 
 	@Override
 	public ScheduledFlight scheduleFlight(ScheduledFlight scheduleFlight) {
-		logger.trace("Schedule Flight method is accessed at DAO Layer");
+		logger.info("Schedule Flight method is accessed at DAO Layer");
 		return scheduledFlightRepository.save(scheduleFlight);
 	}
 	
@@ -53,7 +53,7 @@ public class ScheduledFlightDaoImpl implements ScheduledFlightDao {
 
 	@Override
 	public List<Flight> viewScheduledFlights(Airport srcAirport, Airport destAirport, String date) {
-		logger.trace("View Schedule Flights method is accessed at DAO Layer");
+		logger.info("View Schedule Flights method is accessed at DAO Layer");
 		List<Flight> flights=new ArrayList<>();
 		List<ScheduledFlight> scheduledFlight=scheduledFlightRepository.findAll();
 		for(ScheduledFlight sf:scheduledFlight)
@@ -69,24 +69,6 @@ public class ScheduledFlightDaoImpl implements ScheduledFlightDao {
 		return flights;
 		
 	}
-
-	/**
-	 * This function is used to get ScheduledFlight object using scheduleId
-	 * 
-	 * @author Garima
-	 * @param Schedule Id
-	 * @return shows the schedules for the given schedule Id
-	 * @version 1.0
-	 * @since 29-10-2020
-	 */
-	@Override
-	public ScheduledFlight viewScheduledFlightById(BigInteger id) {
-		logger.trace("view Schedule Flight method is accessed at DAO Layer");
-		List<ScheduledFlight> scheduledFlight=scheduledFlightRepository.findAll();
-		ScheduledFlight scheduledFlights=(ScheduledFlight) scheduledFlight.stream().filter(n->n.getScheduleId().equals(id)).collect(Collectors.toList());
-		return scheduledFlights;
-	}
-	
 	
 	/**
 	 * This function is used to view Scheduled Flights using Flight number 
@@ -100,6 +82,7 @@ public class ScheduledFlightDaoImpl implements ScheduledFlightDao {
 	@Override
 	public List<ScheduledFlight> viewScheduledFlightsByFlightNumber(BigInteger flightNumber)
 	{
+		logger.info("view scheduled flight by flight number is accessed at DAO layer");
 		List<ScheduledFlight>flights=new ArrayList<>();
 		List<ScheduledFlight> scheduledFlight=scheduledFlightRepository.findAll();
 		for(ScheduledFlight sf:scheduledFlight)
@@ -124,7 +107,7 @@ public class ScheduledFlightDaoImpl implements ScheduledFlightDao {
 
 	@Override
 	public List<ScheduledFlight> viewAllScheduledFlights() {
-		logger.trace("view All Schedule Flight method is accessed at DAO Layer");
+		logger.info("view All Schedule Flight method is accessed at DAO Layer");
 		return scheduledFlightRepository.findAll();
 	}
 
@@ -140,7 +123,7 @@ public class ScheduledFlightDaoImpl implements ScheduledFlightDao {
 	 */
 	@Override
 	public ScheduledFlight modifyScheduledFlight(Flight flight, Schedule schedule, int availableSeats) {
-		logger.trace("Modify Schedule Flight method is accessed at DAO Layer");
+		logger.info("Modify Schedule Flight method is accessed at DAO Layer");
 		ScheduledFlight scheduledFlight1=new ScheduledFlight(flight,availableSeats,schedule);
 		return scheduledFlightRepository.save(scheduledFlight1);
 	}
@@ -155,7 +138,7 @@ public class ScheduledFlightDaoImpl implements ScheduledFlightDao {
 
 	@Override
 	public void deleteScheduledFlight(BigInteger id) {
-		logger.trace(" delete Schedule Flight method is accessed at DAO Layer");
+		logger.info(" delete Schedule Flight method is accessed at DAO Layer");
 		scheduledFlightRepository.deleteById(id);
 	}
 

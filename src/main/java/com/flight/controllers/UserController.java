@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.flight.entities.Airport;
 import com.flight.entities.Booking;
+import com.flight.entities.Flight;
 import com.flight.entities.GetSchedule;
 import com.flight.entities.Passenger;
 import com.flight.entities.ScheduledFlight;
@@ -26,7 +27,9 @@ import com.flight.entities.User;
 import com.flight.repositories.BookingRepository;
 import com.flight.service.AirportService;
 import com.flight.service.BookingService;
+import com.flight.service.FlightService;
 import com.flight.service.PassengerService;
+import com.flight.service.ScheduledFlightService;
 import com.flight.service.UserService;
 
 @RestController
@@ -47,6 +50,12 @@ public class UserController {
 
 	@Autowired
 	private AirportService airportService;
+	
+	@Autowired
+	private FlightService flightService;
+	
+	@Autowired
+	private ScheduledFlightService sfService;
 
 	Logger logger = LoggerFactory.getLogger(UserController.class);
 
@@ -252,5 +261,172 @@ public class UserController {
 		logger.trace("addAirport method accessed");
 		return airportService.addAirport(airport);
 	}
+	
+	
+	/**
+	 * This function is used to add Flight object to flight database
+	 * 
+	 * @author Garima
+	 * @param flight object
+	 * @return Response Entity from service if flight object is added successfully
+	 * @version 1.0
+	 * @since 29-10-2020
+	 */
+	
+	@PostMapping("/addFlight")
+	public Flight addFlight(@RequestBody Flight flight) {
+		logger.info("add flight method is accessed in controller");
+		return flightService.addFlight(flight);
+	}
 
+	/**
+	 * This function is used to get the list of all the flights
+	 *  
+	 * @author Garima
+	 * @param None
+	 * @return return List of all the flights 
+	 * @version 1.0
+	 * @since 29-10-2020
+	 
+	*/
+	
+	@GetMapping("/allFlight")
+	public List<Flight> viewAllFlight() {
+		logger.info("view all flight method is accessed in controller");
+		return flightService.viewAllFlight();
+	}
+
+	/**
+	 * This function is used to get the flight object using flight number
+	 * 
+	 * @author Garima
+	 * @param flight object
+	 * @return flight object from the corresponding flight number
+	 * @version 1.0
+	 * @since 29-10-2020
+	 
+	*/
+	@GetMapping("/viewFlight/{id}")
+	public Flight viewFlight(@PathVariable("id") BigInteger flightNo) {
+		logger.info("view flight method is accessed in controller");
+		return flightService.viewFlight(flightNo);
+	}
+
+	/**
+	 * This function is used to modify the existing flight object
+	 * 
+	 * @author Garima
+	 * @param Flight object to be modified
+	 * @return Flight object which is modified
+	 * @version 1.0
+	 * @since 29-10-2020
+	 
+	*/
+	@PutMapping("/updateFlight")
+	public Flight modifyFlight(@RequestBody Flight flight) {
+		logger.info("update flight method is accessed in controller");
+		return flightService.modifyFlight(flight);
+	}
+
+	/**
+	 * This function is used to delete flight from database
+	 * 
+	 * @author Garima
+	 * @param Flight Number of the flight to be deleted
+	 * @return output on the console that flight is deleted
+	 * @version 1.0
+	 * @since 29-10-2020
+	 */
+	
+	@DeleteMapping("/deleteFlight/{id}")
+	public void removeFlight(@PathVariable("id") BigInteger flightNumber) {
+		logger.info("delete flight method is accessed in controller");
+		flightService.deleteFlight(flightNumber);
+	}
+	
+	/**
+	 * This function is used to get the list of the ScheduledFlight
+	 * 
+	 * @author Garima
+	 * @param None
+	 * @return List of all the scheduled flights
+	 * @version 1.0
+	 * @since 29-10-2020
+	 
+	*/
+	@GetMapping("/viewAll")
+	public Iterable<ScheduledFlight> viewAllScheduledFlight() {
+		logger.info("view all scheduled flight method is accessed in controller");
+		return sfService.viewAllScheduledFlights();
+	}
+	
+	
+	/**
+	 * This function is used to view Scheduled Flights using Flight number 
+	 * 
+	 * @author Garima
+	 * @param Flight Number
+	 * @return shows scheduled flights information using flight number provided
+	 * @version 1.0
+	 * @since 29-10-2020
+	 */
+	
+	@GetMapping("/viewF/{id}")
+	public List<ScheduledFlight> viewScheduledFlightByFlightId(@PathVariable("id") BigInteger flightId) {
+		logger.info("view scheduled flight method is accessed in controller");
+		List<ScheduledFlight> searchSFlight = (List<ScheduledFlight>) sfService.viewScheduledFlightsByFlightNumber(flightId);
+		return searchSFlight;
+	}
+	
+	/**
+	 * This function is used to delete the scheduledFlight whose schedule ID is given
+	 * 
+	 * @author Garima
+	 * @param schedule ID
+	 * @return ScheduledFlight with the given Schedule ID is deleted
+	 */
+	
+	@DeleteMapping("/delete/{id}")
+	public void deleteScheduledFlight(@PathVariable("id") BigInteger flightId) {
+		logger.info("delete scheduled flight method is accessed in controller");
+		sfService.deleteScheduledFlight(flightId);
+	}
+	
+	/**
+	 * This function is used to modify the ScheduledFlight object by using flight,schedule objects and
+	 * number of available seats
+	 * 
+	 * @author Garima
+	 * @param ScheduledFlight object
+	 * @return modify the schedule for the given Flight
+	 * @version 1.0
+	 * @since 29-10-2020
+	 
+	*/
+	@PutMapping("/modify")
+	public ScheduledFlight modifyScheduleFlight(@RequestBody ScheduledFlight scheduleFlight) {
+		logger.info("modify scheduled flight method is accessed in controller");
+		ScheduledFlight modifySFlight = sfService.modifyScheduledFlight(scheduleFlight.getFlight(),scheduleFlight.getSchedule(),scheduleFlight.getAvailableSeats());
+		return modifySFlight;
+	}
+	
+	/**
+	 * This function is used to add the ScheduledFlight object to database
+	 * 
+	 * @author Garima
+	 * @param ScheduleFlight object to be added
+	 * @return scheduledFlight object added
+	 * @version 1.0
+	 * @since 29-10-2020
+	 
+*/
+
+	@PostMapping("/addSCheduledFlights")
+	public ScheduledFlight addSF(@RequestBody ScheduledFlight scheduledFlight)
+	{
+		logger.info("add scheduled flight method is accessed in controller");
+		return sfService.scheduleFlight(scheduledFlight);
+	}
+		
+	
 }

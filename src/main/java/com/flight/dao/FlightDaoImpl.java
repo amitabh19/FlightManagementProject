@@ -31,13 +31,13 @@ Logger logger=LoggerFactory.getLogger(FlightDaoImpl.class);
 	 */
 	@Override
 	public Flight addFlight(Flight flight) {
-		logger.trace("add Flight method is accessed at DAO Layer");
+		logger.info("add Flight method is accessed at DAO Layer");
 		return flightRep.save(flight);
 	}
 	
 	@Override
 	public List<Flight> viewAllFlight() {
-		logger.trace("viewAllFlight method is accessed at DAO Layer");
+		logger.info("viewAllFlight method is accessed at DAO Layer");
 		return flightRep.findAll();
 	}
 	
@@ -53,7 +53,7 @@ Logger logger=LoggerFactory.getLogger(FlightDaoImpl.class);
 
 	@Override
 	public Flight viewFlight(BigInteger flightNumber) {
-		logger.trace("view Flight method is accessed...");
+		logger.info("view Flight method is accessed...");
 		return flightRep.findById(flightNumber).get();
 	}
 	
@@ -69,7 +69,7 @@ Logger logger=LoggerFactory.getLogger(FlightDaoImpl.class);
 
 	@Override
 	public Flight modifyFlight(Flight flight) {
-		logger.trace("modify Flight method is accessed at DAO Layer");
+		logger.info("modify Flight method is accessed at DAO Layer");
 		return flightRep.save(flight);
 	}
 
@@ -85,7 +85,7 @@ Logger logger=LoggerFactory.getLogger(FlightDaoImpl.class);
 	 */
 	@Override
 	public void removeFlight(BigInteger flightNumber) {
-		logger.trace("remove Flight method is accessed at DAO Layer");
+		logger.info("remove Flight method is accessed at DAO Layer");
 		flightRep.deleteById(flightNumber);
 		System.out.println("Flight of flight number "+ flightNumber+" is deleted successfully");
 	}

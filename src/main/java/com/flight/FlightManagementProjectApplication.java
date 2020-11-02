@@ -27,7 +27,7 @@ import com.flight.repositories.UserRepository;
 
 @EntityScan(basePackages = "com.flight.entities")
 @SpringBootApplication(scanBasePackages = { "com.flight.repositories", "com.flight.enitites", "com.flight.controllers",
-		"com.flight.dao", "com.flight.service" })
+		"com.flight.dao", "com.flight.service","com.flight.exceptions" })
 public class FlightManagementProjectApplication implements CommandLineRunner {
 
 	@Autowired
