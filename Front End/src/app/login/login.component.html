@@ -1,0 +1,48 @@
+<nav class="navbar navbar-expand-sm navbarC">
+  <div class="container">
+       <h2>Flight Management System</h2>
+  </div>
+</nav>
+
+<div class="container">
+  <h4 style="text-align:center; padding:20px; margin-left: -92px;">Login to use Flight Management System</h4>  
+  <div *ngIf="tusername!=null" class="alert alert-success" role="alert">
+      Signup successful login to continue. <br>
+      You can login now.
+    </div>
+
+
+
+    <div class="row">
+      <div class="col-md-5 offset-md-3 loginF">
+        <form class="formL">
+        <div class="form group">
+          <label for="email">Email</label>
+          <input id="email" type="text" name="username" class="form-control" [(ngModel)] = email required #email1 ="ngModel"  [class.is-invalid]="email1.invalid && email1.touched">
+          <small [class.d-none]="email1.valid || email1.untouched" class="text-danger">email is mandatory</small>
+      </div>
+    
+      <div class="form group">
+          <label for="pass">Password</label>
+          <input  id="pass" type="password" name="pass" class="form-control"  [(ngModel)] = password required #password1 ="ngModel" [class.is-invalid]="password1.invalid && password1.touched"> 
+          <small [class.d-none]="password1.valid || password1.untouched" class="text-danger">password is mandatory</small>
+        </div>
+
+      <div class="form group">
+          <a routerLink="/signup">New User? Sign Up here</a>  
+      </div>
+
+      <div class="form group">
+          <input id="loginn"type="submit" value="Login" style="margin-top: 15px;" class="btn btn-success" (click)="processForm()">
+      </div>
+
+      <div *ngIf="error!=null" class="alert alert-danger" role="alert">
+          {{error}}
+        </div>
+      </form>
+      </div>
+    </div>
+     
+
+  
+</div>

@@ -1,0 +1,118 @@
+<nav class="navbar navbar-expand-sm navbarC">
+	<div class="container">
+		<h2>Flight Management System</h2>
+	</div>
+</nav>
+
+
+
+<div class="container">
+	<div class="row">
+		<div class="col-md-6 offset-md-2 signupF">
+
+			<h4 style="text-align: center; padding: 10px;">Sign Up Here</h4>
+			<form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="formS">
+
+				<div class="form-group" [ngClass]="{'has-error': ((signupForm.get('username').touched ||
+			  signupForm.get('username').dirty) &&
+			  signupForm.get('username').errors)}">
+					<label class="col-sm-2 control-label" for="username">username:</label>
+					<div class="col-sm-8">
+						<input id="username" formControlName="username" type="text" class="form-control">
+						<div class="alert alert-danger" role="alert" *ngIf="((signupForm.get('username').touched) &&
+				  signupForm.get('username').errors)">
+							<span id="errorRequired"  *ngIf="signupForm.get('username').errors.required">
+								username is required
+							</span>
+							<span id="errorMinUser" *ngIf="(signupForm.get('username').errors.minlength)">username should atleast be 3
+								characters long.
+							</span>
+							<span id="errorLongUsername"  *ngIf="signupForm.get('username').errors.maxlength">username should not be more than
+								10 characters</span>
+
+						</div>
+						<div class="alert alert-danger" role="alert" *ngIf="(signupForm.get('username').touched ||
+				  signupForm.get('username').dirty) && !userBool">
+							<span>
+								Username already linked with another account.
+							</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group" [ngClass]="{'has-error': ((signupForm.get('email').touched) &&
+					signupForm.get('email').invalid)}">
+					<label class="col-sm-2 control-label" for="email">email:</label>
+					<div class="col-sm-8">
+						<input id="email" formControlName="email" type="email" class="form-control">
+						<div class="alert alert-danger" role="alert" *ngIf="((signupForm.get('email').touched ) &&
+							signupForm.get('email').errors)">
+							<span *ngIf="signupForm.get('email').errors.required">
+								Email Id is required
+							</span>
+							<span *ngIf="signupForm.get('email').errors?.email ">
+								Incorrect Email pattern
+							</span>
+						</div>
+						<div class="alert alert-danger" role="alert" *ngIf="(signupForm.get('email').touched ||
+							signupForm.get('email').dirty) && !emailBool">
+							<span>
+								email id already linked with another account.
+							</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group" [ngClass]="{'has-error': ((signupForm.get('mobileNo').touched ||
+					signupForm.get('mobileNo').dirty) &&
+					signupForm.get('mobileNo').errors)}">
+					<label class="col-sm-2 control-label" for="mobileNo">mobileNo:</label>
+					<div class="col-sm-8">
+						<input id="mobileNo" formControlName="mobileNo" type="text" class="form-control">
+						<div class="alert alert-danger" role="alert" *ngIf="((signupForm.get('mobileNo').touched ) &&
+							signupForm.get('mobileNo').errors)">
+							<span *ngIf="signupForm.get('mobileNo').errors.required">
+								mobileNo is required
+							</span>
+							<span *ngIf="(signupForm.get('mobileNo').errors.minlength ||
+								signupForm.get('mobileNo').errors.maxlength)">Mobile number should be 10 digits.
+							</span><br>
+							<span *ngIf="(signupForm.get('mobileNo').errors.pattern)">Only numbers allowed</span>
+						</div>
+						<div class="alert alert-danger" role="alert" *ngIf="(signupForm.get('mobileNo').touched ||
+							signupForm.get('mobileNo').dirty) && !phoneBool">
+							<span>
+								Mobile No already linked with another account.
+							</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="form-group" [ngClass]="{'has-error': ((signupForm.get('password').touched ||
+					signupForm.get('password').dirty) &&
+					signupForm.get('password').errors)}">
+					<label class="col-sm-2 control-label" for="password">password:</label>
+					<div class="col-sm-8">
+						<input id="password" formControlName="password" type="password" class="form-control">
+						<div class="alert alert-danger" role="alert" *ngIf="((signupForm.get('password').touched ) &&
+							signupForm.get('password').errors)">
+							<span *ngIf="signupForm.get('password').errors.required">
+								password is required
+							</span>
+							<span *ngIf="(signupForm.get('password').errors.minlength)">password should atleast be 8
+								characters long.
+							</span>
+							<span *ngIf="signupForm.get('password').errors.maxlength">password should not be more than
+								20 characters</span>
+						</div>
+					</div>
+				</div>
+				<div class="form-group">
+					<button id="submitBtn" type="submit" class="btn btn-success " [disabled]="!signupForm.valid">Submit</button>
+				</div>
+			</form>
+		</div>
+
+	</div>
+
+</div>
