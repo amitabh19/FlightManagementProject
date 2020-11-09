@@ -9,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.flight.dao.UserDao;
+import com.flight.entities.AuthLogin;
 import com.flight.entities.User;
 import com.flight.exceptions.RecordAlreadyPresentException;
 import com.flight.exceptions.RecordIsEmptyException;
@@ -183,5 +185,37 @@ public class UserServiceImpl implements UserService {
 
 		return false;
 
+	}
+	/**
+	 * This function is used to authenticate a user from the theeir credentials
+	 * @author amitabh
+	 * @param AuthLogin object
+	 * @return will return response entity if the user has entered the correct credentials
+	 * @version 1.0
+	 * @since 05-11-2020
+	 */
+	public ResponseEntity<?> authenticateUser(@RequestBody AuthLogin authLogin) throws RecordNotFoundException 
+	{
+		String email = authLogin.getEmail();
+		String password = authLogin.getPassword();
+		List<User> listUsers = userDao.displayAllUsers();
+		User tempUser = null;
+		for(User user : listUsers)
+		{
+			if(user.getEmail().equalsIgnoreCase(email) && user.getUserPassword().equals(password))
+			{
+				tempUser = user;
+				break;
+			}
+		}
+		if(tempUser!= null)
+		{
+			return new ResponseEntity<User>(tempUser, HttpStatus.OK);
+		}
+		
+		else {
+			throw new RecordNotFoundException("wrong credentials");
+		}
+				
 	}
 }

@@ -59,10 +59,12 @@ public class FlightManagementProjectApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		// TODO Auto-generated method stub
 
-		User u = new User("user", "amitabh", "sadadsa", "1234567890", "amitabh@gmail.com");
-		User u1 = new User("admin", "sahil", "fpppp", "7550172933", "admin@gmail.com");
+		User u = new User("user", "amitabh", "amitabhs", "1234567890", "amitabh@gmail.com");
+		User u1 = new User("admin", "sahil", "sahilpass", "7550172933", "admin@gmail.com");
+		User u2 = new User("user", "test", "testpass", "3434343434", "test@u.com");
 		userRepo.save(u);
 		userRepo.save(u1);
+		userRepo.save(u2);
 
 		Airport a = new Airport("BarcelonaAirport", "Barcelona", "BCN");
 		Airport b = new Airport("MunichAirport", "Munich", "MCN");
